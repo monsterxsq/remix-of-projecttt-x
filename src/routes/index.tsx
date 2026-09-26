@@ -122,10 +122,22 @@ function Funnel() {
     }
   }, [funnel.completed]);
 
+  useEffect(() => {
+    if (showPopup || step < 0 || step >= QUESTIONS.length) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [showPopup, step]);
+
   function start() {
     const clean = name.trim();
     if (clean.length < 2) return setError("Digite seu primeiro nome para continuar.");
     if (!accepted) return setError("Marque a caixinha para garantir seu presente de 9 anos.");
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     setError("");
     setFunnel({ name: clean, completed: false });
     setShowPopup(false);
@@ -141,11 +153,11 @@ function Funnel() {
       setFunnel({ name: name.trim() || funnel.name, completed: true });
       setCelebrate(true);
       setConfetti(true);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       window.setTimeout(() => setConfetti(false), 4600);
     } else {
       setStep(step + 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }
   }
 

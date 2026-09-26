@@ -335,9 +335,13 @@ function Funnel() {
                   Quero meu desconto de aniversário <ArrowRight className="size-5" />
                 </button>
 
-                <p className="flex items-center justify-center gap-1.5 text-center text-xs text-muted-foreground">
-                  <Flame className="size-3.5 text-primary" /> Promoção limitada para{" "}
-                  <b className="text-foreground">432 produtos</b> — garanta o seu
+                <p className="flex flex-col items-center gap-0.5 text-center text-xs leading-snug text-muted-foreground">
+                  <span className="inline-flex items-center gap-1.5">
+                    <Flame className="size-3.5 text-primary" /> Promoção limitada
+                  </span>
+                  <span>
+                    para <b className="text-foreground">432 produtos</b> — garanta o seu
+                  </span>
                 </p>
               </div>
             </div>

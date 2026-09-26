@@ -246,7 +246,7 @@ function SiteFooter() {
               <li>Sobre a Mari Maria</li>
               <li>Política de privacidade</li>
               <li>Termos de uso</li>
-              <li>Produtos originais com nota fiscal</li>
+              <li>Por tempo limitado</li>
             </ul>
           </div>
           <div>

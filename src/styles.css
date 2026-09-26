@@ -159,6 +159,8 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    min-height: 100dvh;
+    overscroll-behavior-y: none;
   }
 }
 
@@ -248,6 +250,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .animate-rise,
+  .animate-pop,
   .animate-cta,
   .animate-marquee {
     animation: none;

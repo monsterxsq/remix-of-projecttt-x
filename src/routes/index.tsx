@@ -16,10 +16,6 @@ import {
 import { Suspense, lazy, useEffect, useState } from "react";
 
 const logo = "/img/logo-crown.svg";
-import quizHero1 from "@/assets/quiz-hero-8.png";
-import quizHero2 from "@/assets/quiz-hero-10.png";
-import quizHero3 from "@/assets/quiz-hero-9.png";
-import quizHero4 from "@/assets/quiz-hero-11.png";
 const Confetti = lazy(() =>
   import("@/components/Confetti").then((m) => ({ default: m.Confetti })),
 );
@@ -29,6 +25,7 @@ const SocialProof = lazy(() =>
 );
 import { BUMPS, PRODUCTS, brl } from "@/lib/products";
 import { useStore } from "@/lib/store";
+import { Button } from "@/components/ui/button";
 
 
 export const Route = createFileRoute("/")({
@@ -48,32 +45,75 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Mari Maria Makeup — Promoção Limitada" },
+      {
+        name: "twitter:description",
+        content:
+          "Responda 4 perguntas rápidas e libere seu desconto especial para garantir um dos 432 produtos da nossa promoção limitada.",
+      },
     ],
     links: [{ rel: "canonical", href: "/" }],
   }),
   component: Funnel,
 });
 
-const QUESTIONS = [
+type QuizOption = {
+  label: string;
+  image?: string;
+};
+
+type QuizQuestion = {
+  q: string;
+  hint: string;
+  options: QuizOption[];
+};
+
+const productQuizOptions = [
+  { slug: "lip-juice", label: "Lip Juice" },
+  { slug: "base-hype-up", label: "Base Hype Up" },
+  { slug: "po-solto-soft-silk", label: "Pó Solto Soft Silk" },
+  { slug: "paleta-afrodite-atena", label: "Paleta Afrodite & Atena" },
+].map(({ slug, label }) => {
+  const image = PRODUCTS.find((product) => product.slug === slug)?.image;
+  return image ? { label, image } : { label };
+});
+
+const QUESTIONS: QuizQuestion[] = [
   {
-    q: "Qual produto você nunca deixa faltar na necessaire?",
-    options: ["Gloss / Lip Juice", "Base", "Pó solto", "Paleta de sombras"],
-    hero: quizHero1,
+    q: "Qual é o seu tipo de maquiagem favorito?",
+    hint: "Escolha o estilo que mais combina com você",
+    options: [
+      { label: "Natural e leve" },
+      { label: "Glow iluminado" },
+      { label: "Marcante e poderosa" },
+      { label: "Colorida e criativa" },
+    ],
   },
   {
-    q: "Como você descreve o seu look do dia a dia?",
-    options: ["Natural e clean", "Glow iluminado", "Marcado e poderoso", "Depende do humor"],
-    hero: quizHero2,
+    q: "Em qual parte do mês você costuma comprar maquiagem?",
+    hint: "Isso ajuda a preparar ofertas melhores para você",
+    options: [
+      { label: "No começo do mês" },
+      { label: "No meio do mês" },
+      { label: "No fim do mês" },
+      { label: "Quando aparece uma promoção" },
+    ],
   },
   {
-    q: "Você está comprando pra você ou pra presentear?",
-    options: ["Pra mim", "Pra presentear alguém", "Os dois"],
-    hero: quizHero3,
+    q: "Qual destes produtos Mari Maria é o seu favorito?",
+    hint: "Escolha apenas um dos queridinhos",
+    options: productQuizOptions,
   },
   {
-    q: "Quanto você quer economizar hoje?",
-    options: ["Quero o kit completo", "Só os mais vendidos", "O máximo possível (90% OFF)"],
-    hero: quizHero4,
+    q: "Qual produto você mais gostaria de ver na Mari Maria?",
+    hint: "Conte o que está faltando na sua necessaire",
+    options: [
+      { label: "Corretivo de alta cobertura" },
+      { label: "Blush líquido" },
+      { label: "Protetor solar com cor" },
+      { label: "Kit completo de skincare" },
+    ],
   },
 ];
 
@@ -132,6 +172,19 @@ function Funnel() {
     return () => window.cancelAnimationFrame(frame);
   }, [showPopup, step]);
 
+  useEffect(() => {
+    if (!showPopup && !celebrate) return;
+    const previousOverflow = document.body.style.overflow;
+    const previousOverscroll = document.body.style.overscrollBehavior;
+    document.body.style.overflow = "hidden";
+    document.body.style.overscrollBehavior = "none";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.body.style.overscrollBehavior = previousOverscroll;
+    };
+  }, [celebrate, showPopup]);
+
   function start() {
     const clean = name.trim();
     if (clean.length < 2) return setError("Digite seu primeiro nome para continuar.");
@@ -165,7 +218,7 @@ function Funnel() {
   const done = step >= QUESTIONS.length;
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-[100dvh]">
       {confetti && (
         <Suspense fallback={null}>
           <Confetti />
@@ -206,7 +259,7 @@ function Funnel() {
 
       {/* POP UP INICIAL */}
       {showPopup && (
-        <div className="fixed inset-0 z-70 flex items-center justify-center overflow-y-auto bg-foreground/70 p-3 backdrop-blur-md sm:p-4">
+        <div className="fixed inset-0 z-70 flex items-start justify-center overflow-y-auto overscroll-contain bg-foreground/70 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-[max(0.75rem,env(safe-area-inset-top))] backdrop-blur-md sm:items-center sm:p-4">
           <div className="my-auto w-full max-w-sm animate-pop overflow-hidden rounded-lg bg-card shadow-card ring-1 ring-border">
             <div className="border-b border-border bg-secondary px-6 py-5">
               <img
@@ -299,63 +352,77 @@ function Funnel() {
 
       {/* QUIZ */}
       {!showPopup && !done && step >= 0 && (
-        <section className="mx-auto max-w-xl px-4 py-8 sm:px-5 sm:py-12">
-          <div className="mb-8">
-            <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              <span>
-                Pergunta {step + 1} de {QUESTIONS.length}
-              </span>
-              <span className="text-primary">{Math.round((step / QUESTIONS.length) * 100)}%</span>
-            </div>
-            <div className="mt-2 h-2 overflow-hidden rounded-full bg-secondary">
+        <section className="quiz-active min-h-[100dvh] bg-background pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+          <header className="sticky top-[81px] z-40 border-b border-border bg-card/95 px-4 py-3 backdrop-blur sm:top-[89px] sm:px-5">
+            <div className="mx-auto max-w-xl">
+              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 text-xs font-semibold text-muted-foreground">
+                <div className="flex min-w-0 items-center gap-2.5">
+                  <img
+                    src={logo}
+                    alt="Mari Maria Makeup"
+                    width={56}
+                    height={40}
+                    className="h-7 w-auto shrink-0 object-contain"
+                  />
+                  <span className="truncate">Pergunta {step + 1} de {QUESTIONS.length}</span>
+                </div>
+                <span className="shrink-0 font-bold text-primary">
+                  {Math.round(((step + 1) / QUESTIONS.length) * 100)}%
+                </span>
+              </div>
               <div
-                className="h-full rounded-full bg-gradient-brand transition-all duration-500"
-                style={{ width: `${(step / QUESTIONS.length) * 100 + 8}%` }}
-              />
+                className="mt-2 h-2 overflow-hidden rounded-full bg-secondary"
+                role="progressbar"
+                aria-label="Progresso do quiz"
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={Math.round(((step + 1) / QUESTIONS.length) * 100)}
+              >
+                <div
+                  className="h-full rounded-full bg-gradient-brand transition-[width] duration-500"
+                  style={{ width: `${((step + 1) / QUESTIONS.length) * 100}%` }}
+                />
+              </div>
             </div>
-          </div>
+          </header>
 
-          <div key={step} className="animate-rise">
+          <div key={step} className="mx-auto max-w-xl animate-rise px-4 pt-5 sm:px-5 sm:pt-8">
             <p className="text-sm font-semibold text-primary">
               {firstName ? `${firstName}, ` : ""}vamos personalizar sua oferta
             </p>
-            <h1 className="mt-2 text-2xl leading-tight sm:text-3xl">{QUESTIONS[step]?.q}</h1>
+            <h1 className="mt-1.5 text-2xl leading-tight sm:text-3xl">{QUESTIONS[step]?.q}</h1>
+            <p className="mt-2 text-sm leading-snug text-muted-foreground">
+              {QUESTIONS[step]?.hint}
+            </p>
 
-            {QUESTIONS[step]?.hero && (
-              <div className="mt-5 grid place-items-center overflow-hidden rounded-2xl bg-secondary p-3 shadow-soft">
-                <img
-                  src={QUESTIONS[step]!.hero}
-                  alt=""
-                  aria-hidden
-                  width={800}
-                  height={800}
-                  loading="eager"
-                  decoding="async"
-                  className="h-40 w-auto max-w-full object-contain sm:h-56"
-                />
-              </div>
-            )}
-
-            <ul className="mt-6 space-y-3">
+            <ul className="mt-5 grid grid-cols-1 gap-2.5 sm:mt-6 sm:gap-3">
               {(QUESTIONS[step]?.options ?? []).map((o) => (
-                <li key={o}>
-                  <button
-                    onClick={() => answer(o)}
-                    className="group flex min-h-[4.5rem] w-full items-center gap-3 rounded-xl border border-border bg-card p-2.5 pr-4 text-left text-[15px] font-medium shadow-soft transition active:scale-[0.99] sm:text-base sm:hover:border-primary sm:hover:bg-accent/40"
+                <li key={o.label}>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => answer(o.label)}
+                    className="group h-auto min-h-16 w-full justify-start whitespace-normal rounded-lg border-border bg-card p-2.5 pr-3 text-left text-[15px] font-semibold shadow-soft active:scale-[0.99] sm:min-h-[4.5rem] sm:p-3 sm:text-base sm:hover:border-primary sm:hover:bg-accent/40"
                   >
-                    <img
-                      src={logo}
-                      alt=""
-                      aria-hidden
-                      width={128}
-                      height={128}
-                      loading="lazy"
-                      decoding="async"
-                      className="size-14 shrink-0 rounded-lg bg-secondary object-contain p-2 sm:size-16"
-                    />
-                    <span className="min-w-0 flex-1">{o}</span>
+                    {o.image ? (
+                      <img
+                        src={o.image}
+                        alt=""
+                        aria-hidden
+                        width={128}
+                        height={128}
+                        loading="eager"
+                        decoding="async"
+                        className="size-12 shrink-0 rounded-md bg-secondary object-cover sm:size-14"
+                      />
+                    ) : (
+                      <span className="grid size-10 shrink-0 place-items-center rounded-md bg-secondary sm:size-11">
+                        <Sparkles className="size-4 text-primary" aria-hidden />
+                      </span>
+                    )}
+                    <span className="min-w-0 flex-1 leading-snug">{o.label}</span>
                     <ArrowRight className="size-4 shrink-0 text-primary opacity-40 transition sm:group-hover:opacity-100" />
-                  </button>
+                  </Button>
                 </li>
               ))}
 

@@ -45,6 +45,13 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Mari Maria Makeup — Promoção Limitada" },
+      {
+        name: "twitter:description",
+        content:
+          "Responda 4 perguntas rápidas e libere seu desconto especial para garantir um dos 432 produtos da nossa promoção limitada.",
+      },
     ],
     links: [{ rel: "canonical", href: "/" }],
   }),
@@ -67,10 +74,10 @@ const productQuizOptions = [
   { slug: "base-hype-up", label: "Base Hype Up" },
   { slug: "po-solto-soft-silk", label: "Pó Solto Soft Silk" },
   { slug: "paleta-afrodite-atena", label: "Paleta Afrodite & Atena" },
-].map(({ slug, label }) => ({
-  label,
-  image: PRODUCTS.find((product) => product.slug === slug)?.image,
-}));
+].map(({ slug, label }) => {
+  const image = PRODUCTS.find((product) => product.slug === slug)?.image;
+  return image ? { label, image } : { label };
+});
 
 const QUESTIONS: QuizQuestion[] = [
   {

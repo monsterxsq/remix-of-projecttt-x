@@ -151,7 +151,7 @@ function TopBar() {
   const { count, setOpen } = useStore();
   return (
     <>
-      <div className="bg-primary px-4 py-2 text-center text-[11px] font-medium leading-tight text-primary-foreground sm:text-xs">
+      <div className="bg-primary px-4 pb-2 pt-[max(0.5rem,env(safe-area-inset-top))] text-center text-[11px] font-medium leading-tight text-primary-foreground sm:text-xs">
         <span className="inline-flex items-center gap-1.5">
           <AlertTriangle className="size-3.5 shrink-0" />
           <span>

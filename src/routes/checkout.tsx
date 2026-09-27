@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
   ArrowLeft,
   Check,
@@ -119,9 +119,9 @@ function Checkout() {
   const [pix, setPix] = useState<{ code: string; transactionId: string } | null>(null);
   const [qrDataUrl, setQrDataUrl] = useState("");
   const [copied, setCopied] = useState(false);
-  const [paid, setPaid] = useState(false);
   const [expired, setExpired] = useState(false);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const navigate = useNavigate();
   const createCharge = useServerFn(createPixCharge);
   const checkStatus = useServerFn(getPixStatus);
 
@@ -187,9 +187,9 @@ function Checkout() {
     };
   }, [pix]);
 
-  // Polling do status a cada 5s, até pagar ou expirar (15 min).
+  // Ao confirmar o pagamento, redireciona para a página de rastreio.
   useEffect(() => {
-    if (!pix || paid || expired) return;
+    if (!pix || expired) return;
     const transactionId = pix.transactionId;
     const id = setInterval(() => {
       void (async () => {
@@ -197,7 +197,7 @@ function Checkout() {
           const res = await checkStatus({ data: { transactionId } });
           if (res.status === "COMPLETED") {
             clearInterval(id);
-            setPaid(true);
+            void navigate({ to: "/rastreio", search: { pedido: transactionId } });
           }
         } catch {
           /* tenta de novo no próximo ciclo */
@@ -206,7 +206,7 @@ function Checkout() {
     }, 5000);
     pollRef.current = id;
     return () => clearInterval(id);
-  }, [pix, paid, expired, checkStatus]);
+  }, [pix, expired, navigate, checkStatus]);
 
   function validate() {
     if (name.trim().length < 2) return "Informe seu nome completo.";
@@ -270,27 +270,6 @@ function Checkout() {
     "mt-1.5 w-full rounded-md border border-input bg-secondary px-3.5 py-3 text-base outline-none focus:border-primary focus:ring-2 focus:ring-ring/30";
   const label = "text-xs font-semibold uppercase tracking-wider text-muted-foreground";
 
-  if (paid) {
-    return (
-      <main className="mx-auto flex max-w-md flex-col items-center px-4 py-16 text-center">
-        <div className="flex size-20 items-center justify-center rounded-full bg-success/15">
-          <Check className="size-10 text-success" />
-        </div>
-        <h1 className="mt-5 text-2xl">Pagamento confirmado!</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Recebemos seu Pix. Seu pedido já está sendo separado e você receberá o código de
-          rastreio por e-mail.
-        </p>
-        <Link
-          to="/"
-          className="mt-6 flex min-h-12 w-full items-center justify-center rounded-md bg-cta font-bold uppercase text-cta-foreground"
-        >
-          Voltar à loja
-        </Link>
-      </main>
-    );
-  }
-
   return (
     <main className="mx-auto max-w-3xl px-4 py-6 sm:px-5 sm:py-10">
       <Link
@@ -336,6 +315,9 @@ function Checkout() {
             {copied ? <Check className="size-5" /> : <Copy className="size-5" />}
             {copied ? "Código copiado" : "Copiar código Pix"}
           </button>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Ao pagar, você é levado direto ao código de rastreio do seu pedido.
+          </p>
           {expired ? (
             <p className="mt-3 text-sm font-medium text-destructive">
               Tempo de pagamento expirado. Recarregue a página para gerar um novo Pix.

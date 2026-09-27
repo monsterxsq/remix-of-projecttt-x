@@ -595,6 +595,7 @@ function Checkout() {
               </button>
             </div>
           </section>
+          </>
           )}
 
           {step === 3 && (

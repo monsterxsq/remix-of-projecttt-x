@@ -489,7 +489,7 @@ function Checkout() {
                 />
               </div>
 
-              <div className="sm:col-span-2">
+              <div className="sm:col-span-3">
                 <label className={label} htmlFor="numero">
                   Número
                 </label>
@@ -501,7 +501,7 @@ function Checkout() {
                   className={field}
                 />
               </div>
-              <div className="sm:col-span-2">
+              <div className="sm:col-span-3">
                 <label className={label} htmlFor="bairro">
                   Bairro
                 </label>
@@ -512,7 +512,7 @@ function Checkout() {
                   className={field}
                 />
               </div>
-              <div className="sm:col-span-4">
+              <div className="sm:col-span-6">
                 <label className={label} htmlFor="cidade">
                   Cidade
                 </label>

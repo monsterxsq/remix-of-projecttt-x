@@ -579,6 +579,58 @@ function Checkout() {
                 </label>
               ))}
             </div>
+            {error && <p className="mt-3 text-sm font-medium text-destructive">{error}</p>}
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => goTo(1)}
+                className="flex min-h-13 items-center justify-center rounded-md border border-border px-4 text-sm font-semibold text-muted-foreground"
+              >
+                Voltar
+              </button>
+              <button
+                onClick={nextStep}
+                className="flex min-h-13 flex-1 items-center justify-center gap-2 rounded-md bg-cta py-3.5 text-base font-bold uppercase tracking-wide text-cta-foreground shadow-cta transition active:scale-[0.99]"
+              >
+                Continuar
+              </button>
+            </div>
+          </section>
+          )}
+
+          {step === 3 && (
+          <>
+          <section className="mt-4 rounded-md border border-border bg-card p-4 shadow-soft sm:p-5">
+            <h2 className="text-base sm:text-lg">Dados para o Pix</h2>
+            <div className="mt-4 grid gap-4">
+              <div>
+                <label className={label} htmlFor="email">
+                  E-mail
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  inputMode="email"
+                  value={email}
+                  maxLength={120}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className={field}
+                  autoComplete="email"
+                />
+              </div>
+              <div>
+                <label className={label} htmlFor="cpf">
+                  CPF
+                </label>
+                <input
+                  id="cpf"
+                  inputMode="numeric"
+                  placeholder="000.000.000-00"
+                  value={cpf}
+                  onChange={(e) => setCpf(maskCpf(e.target.value))}
+                  className={field}
+                />
+              </div>
+            </div>
           </section>
 
           <section className="mt-4 rounded-md border border-primary/30 bg-card p-4 shadow-soft sm:p-5">

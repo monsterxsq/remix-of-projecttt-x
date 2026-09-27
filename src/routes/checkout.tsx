@@ -115,6 +115,7 @@ function Checkout() {
   const [shipping, setShipping] = useState<ShippingId>("gratis");
   const [cepStatus, setCepStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
   const [error, setError] = useState("");
+  const [step, setStep] = useState<1 | 2 | 3>(1);
   const [pixLoading, setPixLoading] = useState(false);
   const [pix, setPix] = useState<{ code: string; transactionId: string } | null>(null);
   const [qrDataUrl, setQrDataUrl] = useState("");
@@ -208,18 +209,43 @@ function Checkout() {
     return () => clearInterval(id);
   }, [pix, expired, navigate, checkStatus]);
 
-  function validate() {
+  function validateStep1() {
     if (name.trim().length < 2) return "Informe seu nome completo.";
-    if (!/^\S+@\S+\.\S+$/.test(email.trim())) return "Informe um e-mail válido.";
-    if (cpf.replace(/\D/g, "").length !== 11) return "Informe um CPF válido.";
     const digitsPhone = phone.replace(/\D/g, "");
     if (digitsPhone.length < 10 || digitsPhone.length > 11)
-      return "Informe um telefone válido com DDD.";
+      return "Informe um celular válido com DDD.";
+    return "";
+  }
+
+  function validateStep2() {
     if (addr.cep.replace(/\D/g, "").length !== 8) return "Informe um CEP válido.";
     if (!addr.street.trim()) return "Informe a rua.";
     if (!addr.number.trim()) return "Informe o número.";
     if (!addr.city.trim() || !addr.state.trim()) return "Informe cidade e estado.";
     return "";
+  }
+
+  function validateStep3() {
+    if (!/^\S+@\S+\.\S+$/.test(email.trim())) return "Informe um e-mail válido.";
+    if (cpf.replace(/\D/g, "").length !== 11) return "Informe um CPF válido.";
+    return "";
+  }
+
+  function validate() {
+    return validateStep1() || validateStep2() || validateStep3();
+  }
+
+  function goTo(next: 1 | 2 | 3) {
+    setError("");
+    setStep(next);
+    requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
+  }
+
+  function nextStep() {
+    const v = step === 1 ? validateStep1() : step === 2 ? validateStep2() : "";
+    setError(v);
+    if (v) return;
+    goTo(step === 1 ? 2 : 3);
   }
 
   async function payWithPix() {
@@ -330,71 +356,89 @@ function Checkout() {
         </section>
       ) : (
         <>
-          <section className="mt-6 rounded-md border border-border bg-card p-4 shadow-soft sm:p-5">
-            <h2 className="text-base sm:text-lg">Seus dados</h2>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <div className="sm:col-span-2">
-                <label className={label} htmlFor="nome">
-                  Nome completo
-                </label>
-                <input
-                  id="nome"
-                  value={name}
-                  maxLength={80}
-                  onChange={(e) => setName(e.target.value)}
-                  className={field}
-                  autoComplete="name"
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <label className={label} htmlFor="email">
-                  E-mail
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  inputMode="email"
-                  value={email}
-                  maxLength={120}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className={field}
-                  autoComplete="email"
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <label className={label} htmlFor="telefone">
-                  Celular (com DDD)
-                </label>
-                <input
-                  id="telefone"
-                  inputMode="numeric"
-                  placeholder="(11) 98765-4321"
-                  value={phone}
-                  onChange={(e) => setPhone(maskPhone(e.target.value))}
-                  className={field}
-                  autoComplete="tel"
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <label className={label} htmlFor="cpf">
-                  CPF
-                </label>
-                <input
-                  id="cpf"
-                  inputMode="numeric"
-                  placeholder="000.000.000-00"
-                  value={cpf}
-                  onChange={(e) => setCpf(maskCpf(e.target.value))}
-                  className={field}
-                />
-              </div>
-            </div>
-          </section>
+          <ol className="mt-6 flex items-center gap-2">
+            {(["Seus dados", "Entrega", "Pagamento"] as const).map((t, i) => {
+              const n = (i + 1) as 1 | 2 | 3;
+              const active = step === n;
+              const done = step > n;
+              return (
+                <li key={t} className="flex min-w-0 flex-1 items-center gap-2">
+                  <span
+                    className={`grid size-7 shrink-0 place-items-center rounded-full text-xs font-bold ${
+                      active
+                        ? "bg-primary text-primary-foreground"
+                        : done
+                          ? "bg-success text-success-foreground"
+                          : "bg-secondary text-muted-foreground"
+                    }`}
+                  >
+                    {done ? <Check className="size-4" /> : n}
+                  </span>
+                  <span
+                    className={`truncate text-xs font-semibold ${
+                      active ? "text-foreground" : "text-muted-foreground"
+                    }`}
+                  >
+                    {t}
+                  </span>
+                  {i < 2 && <span className="h-px flex-1 bg-border" />}
+                </li>
+              );
+            })}
+          </ol>
 
+          {step === 1 && (
+            <section className="mt-4 rounded-md border border-border bg-card p-4 shadow-soft sm:p-5">
+              <h2 className="text-base sm:text-lg">Seus dados</h2>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Etapa 1 de 3 — rapidinho, prometo.
+              </p>
+              <div className="mt-4 grid gap-4">
+                <div>
+                  <label className={label} htmlFor="nome">
+                    Nome completo
+                  </label>
+                  <input
+                    id="nome"
+                    value={name}
+                    maxLength={80}
+                    onChange={(e) => setName(e.target.value)}
+                    className={field}
+                    autoComplete="name"
+                  />
+                </div>
+                <div>
+                  <label className={label} htmlFor="telefone">
+                    Celular (com DDD)
+                  </label>
+                  <input
+                    id="telefone"
+                    inputMode="numeric"
+                    placeholder="(11) 98765-4321"
+                    value={phone}
+                    onChange={(e) => setPhone(maskPhone(e.target.value))}
+                    className={field}
+                    autoComplete="tel"
+                  />
+                </div>
+              </div>
+              {error && <p className="mt-3 text-sm font-medium text-destructive">{error}</p>}
+              <button
+                onClick={nextStep}
+                className="mt-4 flex min-h-13 w-full items-center justify-center gap-2 rounded-md bg-cta py-3.5 text-base font-bold uppercase tracking-wide text-cta-foreground shadow-cta transition active:scale-[0.99]"
+              >
+                Continuar
+              </button>
+            </section>
+          )}
+
+          {step === 2 && (
+          <>
           <section className="mt-4 rounded-md border border-border bg-card p-4 shadow-soft sm:p-5">
             <h2 className="flex items-center gap-2 text-base sm:text-lg">
               <Truck className="size-4 text-primary" /> Endereço de entrega
             </h2>
+            <p className="mt-1 text-xs text-muted-foreground">Etapa 2 de 3 — digite o CEP e o resto preenche sozinho.</p>
 
             <div className="mt-4 grid gap-4 sm:grid-cols-6">
               <div className="sm:col-span-2">
@@ -536,6 +580,59 @@ function Checkout() {
                 </label>
               ))}
             </div>
+            {error && <p className="mt-3 text-sm font-medium text-destructive">{error}</p>}
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => goTo(1)}
+                className="flex min-h-13 items-center justify-center rounded-md border border-border px-4 text-sm font-semibold text-muted-foreground"
+              >
+                Voltar
+              </button>
+              <button
+                onClick={nextStep}
+                className="flex min-h-13 flex-1 items-center justify-center gap-2 rounded-md bg-cta py-3.5 text-base font-bold uppercase tracking-wide text-cta-foreground shadow-cta transition active:scale-[0.99]"
+              >
+                Continuar
+              </button>
+            </div>
+          </section>
+          </>
+          )}
+
+          {step === 3 && (
+          <>
+          <section className="mt-4 rounded-md border border-border bg-card p-4 shadow-soft sm:p-5">
+            <h2 className="text-base sm:text-lg">Dados para o Pix</h2>
+            <div className="mt-4 grid gap-4">
+              <div>
+                <label className={label} htmlFor="email">
+                  E-mail
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  inputMode="email"
+                  value={email}
+                  maxLength={120}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className={field}
+                  autoComplete="email"
+                />
+              </div>
+              <div>
+                <label className={label} htmlFor="cpf">
+                  CPF
+                </label>
+                <input
+                  id="cpf"
+                  inputMode="numeric"
+                  placeholder="000.000.000-00"
+                  value={cpf}
+                  onChange={(e) => setCpf(maskCpf(e.target.value))}
+                  className={field}
+                />
+              </div>
+            </div>
           </section>
 
           <section className="mt-4 rounded-md border border-primary/30 bg-card p-4 shadow-soft sm:p-5">
@@ -657,14 +754,24 @@ function Checkout() {
 
           {error && <p className="mt-4 text-sm font-medium text-destructive">{error}</p>}
 
-          <button
-            onClick={payWithPix}
-            disabled={items.length === 0 || pixLoading}
-            className="mt-4 flex min-h-14 w-full items-center justify-center gap-2 rounded-md bg-cta text-base font-bold uppercase tracking-wide text-cta-foreground shadow-cta transition active:scale-[0.99] disabled:opacity-40"
-          >
-            {pixLoading ? <Loader2 className="size-5 animate-spin" /> : <QrCode className="size-5" />}
-            Pagar com Pix
-          </button>
+          <div className="mt-4 flex gap-2">
+            <button
+              onClick={() => goTo(2)}
+              className="flex min-h-14 items-center justify-center rounded-md border border-border px-4 text-sm font-semibold text-muted-foreground"
+            >
+              Voltar
+            </button>
+            <button
+              onClick={payWithPix}
+              disabled={items.length === 0 || pixLoading}
+              className="flex min-h-14 flex-1 items-center justify-center gap-2 rounded-md bg-cta text-base font-bold uppercase tracking-wide text-cta-foreground shadow-cta transition active:scale-[0.99] disabled:opacity-40"
+            >
+              {pixLoading ? <Loader2 className="size-5 animate-spin" /> : <QrCode className="size-5" />}
+              Gerar Pix
+            </button>
+          </div>
+          </>
+          )}
         </>
       )}
 

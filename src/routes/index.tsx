@@ -458,22 +458,6 @@ function Funnel() {
                 Seus <b>90% OFF</b> já estão aplicados nos 432 produtos mais vendidos e kits da
                 queima de estoque de 9 anos.
               </p>
-              <div className="mt-4 grid gap-1.5 sm:grid-cols-3">
-                {[
-                  { icon: Sparkles, t: "90% OFF aplicado" },
-                  { icon: Gift, t: "432 itens liberados" },
-                ].map(({ icon: Icon, t }) => (
-                  <p
-                    key={t}
-                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-card/15 px-3 py-2 text-[11px] font-semibold ring-1 ring-card/20"
-                  >
-                    <Icon className="size-3.5" /> {t}
-                  </p>
-                ))}
-                <p className="inline-flex items-center justify-center gap-2 rounded-xl bg-card/15 px-3 py-2 text-[11px] font-semibold ring-1 ring-card/20">
-                  <Flame className="size-3.5" /> Promoção limitada — garanta o seu
-                </p>
-              </div>
             </div>
           </section>
 

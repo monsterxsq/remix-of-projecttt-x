@@ -356,66 +356,83 @@ function Checkout() {
         </section>
       ) : (
         <>
-          <section className="mt-6 rounded-md border border-border bg-card p-4 shadow-soft sm:p-5">
-            <h2 className="text-base sm:text-lg">Seus dados</h2>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <div className="sm:col-span-2">
-                <label className={label} htmlFor="nome">
-                  Nome completo
-                </label>
-                <input
-                  id="nome"
-                  value={name}
-                  maxLength={80}
-                  onChange={(e) => setName(e.target.value)}
-                  className={field}
-                  autoComplete="name"
-                />
+          <ol className="mt-6 flex items-center gap-2">
+            {(["Seus dados", "Entrega", "Pagamento"] as const).map((t, i) => {
+              const n = (i + 1) as 1 | 2 | 3;
+              const active = step === n;
+              const done = step > n;
+              return (
+                <li key={t} className="flex min-w-0 flex-1 items-center gap-2">
+                  <span
+                    className={`grid size-7 shrink-0 place-items-center rounded-full text-xs font-bold ${
+                      active
+                        ? "bg-primary text-primary-foreground"
+                        : done
+                          ? "bg-success text-success-foreground"
+                          : "bg-secondary text-muted-foreground"
+                    }`}
+                  >
+                    {done ? <Check className="size-4" /> : n}
+                  </span>
+                  <span
+                    className={`truncate text-xs font-semibold ${
+                      active ? "text-foreground" : "text-muted-foreground"
+                    }`}
+                  >
+                    {t}
+                  </span>
+                  {i < 2 && <span className="h-px flex-1 bg-border" />}
+                </li>
+              );
+            })}
+          </ol>
+
+          {step === 1 && (
+            <section className="mt-4 rounded-md border border-border bg-card p-4 shadow-soft sm:p-5">
+              <h2 className="text-base sm:text-lg">Seus dados</h2>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Etapa 1 de 3 — rapidinho, prometo.
+              </p>
+              <div className="mt-4 grid gap-4">
+                <div>
+                  <label className={label} htmlFor="nome">
+                    Nome completo
+                  </label>
+                  <input
+                    id="nome"
+                    value={name}
+                    maxLength={80}
+                    onChange={(e) => setName(e.target.value)}
+                    className={field}
+                    autoComplete="name"
+                  />
+                </div>
+                <div>
+                  <label className={label} htmlFor="telefone">
+                    Celular (com DDD)
+                  </label>
+                  <input
+                    id="telefone"
+                    inputMode="numeric"
+                    placeholder="(11) 98765-4321"
+                    value={phone}
+                    onChange={(e) => setPhone(maskPhone(e.target.value))}
+                    className={field}
+                    autoComplete="tel"
+                  />
+                </div>
               </div>
-              <div className="sm:col-span-2">
-                <label className={label} htmlFor="email">
-                  E-mail
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  inputMode="email"
-                  value={email}
-                  maxLength={120}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className={field}
-                  autoComplete="email"
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <label className={label} htmlFor="telefone">
-                  Celular (com DDD)
-                </label>
-                <input
-                  id="telefone"
-                  inputMode="numeric"
-                  placeholder="(11) 98765-4321"
-                  value={phone}
-                  onChange={(e) => setPhone(maskPhone(e.target.value))}
-                  className={field}
-                  autoComplete="tel"
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <label className={label} htmlFor="cpf">
-                  CPF
-                </label>
-                <input
-                  id="cpf"
-                  inputMode="numeric"
-                  placeholder="000.000.000-00"
-                  value={cpf}
-                  onChange={(e) => setCpf(maskCpf(e.target.value))}
-                  className={field}
-                />
-              </div>
-            </div>
-          </section>
+              {error && <p className="mt-3 text-sm font-medium text-destructive">{error}</p>}
+              <button
+                onClick={nextStep}
+                className="mt-4 flex min-h-13 w-full items-center justify-center gap-2 rounded-md bg-cta py-3.5 text-base font-bold uppercase tracking-wide text-cta-foreground shadow-cta transition active:scale-[0.99]"
+              >
+                Continuar
+              </button>
+            </section>
+          )}
+
+          {step === 2 && (
 
           <section className="mt-4 rounded-md border border-border bg-card p-4 shadow-soft sm:p-5">
             <h2 className="flex items-center gap-2 text-base sm:text-lg">

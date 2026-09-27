@@ -7,7 +7,7 @@ import { getPixStatus } from "@/lib/pix.functions";
 
 export const Route = createFileRoute("/rastreio")({
   validateSearch: (search: Record<string, unknown>) => ({
-    pedido: typeof search.pedido === "string" ? search.pedido.slice(0, 120) : undefined,
+    pedido: typeof search["pedido"] === "string" ? search["pedido"].slice(0, 120) : undefined,
   }),
   head: () => ({
     meta: [

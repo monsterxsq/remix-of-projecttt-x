@@ -1,14 +1,11 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import {
   ArrowLeft,
-  BadgeCheck,
   Check,
   Flame,
   Minus,
   Plus,
-  ShieldCheck,
   ShoppingBag,
-  Truck,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -179,13 +176,6 @@ function ProductPage() {
             {product.description}
           </p>
 
-          <ul className="mt-5 space-y-2">
-            {product.bullets.map((b) => (
-              <li key={b} className="flex items-start gap-2 text-sm">
-                <Check className="mt-0.5 size-4 shrink-0 text-primary" /> {b}
-              </li>
-            ))}
-          </ul>
 
           {product.options && (
             <div id="opcoes" className="mt-7 scroll-mt-24">
@@ -304,18 +294,6 @@ function ProductPage() {
             >
               Adicionar à sacola
             </button>
-          </div>
-
-          <div className="mt-5 grid grid-cols-3 gap-3 text-center text-[11px] font-semibold text-muted-foreground">
-            <p className="flex flex-col items-center gap-1.5">
-              <Truck className="size-4 text-primary" /> Envio em 24h
-            </p>
-            <p className="flex flex-col items-center gap-1.5">
-              <ShieldCheck className="size-4 text-primary" /> Compra segura
-            </p>
-            <p className="flex flex-col items-center gap-1.5">
-              <BadgeCheck className="size-4 text-primary" /> Produto original
-            </p>
           </div>
         </div>
       </section>

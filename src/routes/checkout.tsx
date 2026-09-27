@@ -433,11 +433,12 @@ function Checkout() {
           )}
 
           {step === 2 && (
-
+          <>
           <section className="mt-4 rounded-md border border-border bg-card p-4 shadow-soft sm:p-5">
             <h2 className="flex items-center gap-2 text-base sm:text-lg">
               <Truck className="size-4 text-primary" /> Endereço de entrega
             </h2>
+            <p className="mt-1 text-xs text-muted-foreground">Etapa 2 de 3 — digite o CEP e o resto preenche sozinho.</p>
 
             <div className="mt-4 grid gap-4 sm:grid-cols-6">
               <div className="sm:col-span-2">

@@ -489,7 +489,7 @@ function Checkout() {
                 />
               </div>
 
-              <div className="sm:col-span-2">
+              <div className="sm:col-span-3">
                 <label className={label} htmlFor="numero">
                   Número
                 </label>
@@ -501,19 +501,7 @@ function Checkout() {
                   className={field}
                 />
               </div>
-              <div className="sm:col-span-4">
-                <label className={label} htmlFor="compl">
-                  Complemento (opcional)
-                </label>
-                <input
-                  id="compl"
-                  value={addr.complement}
-                  onChange={(e) => setAddr((a) => ({ ...a, complement: e.target.value }))}
-                  className={field}
-                />
-              </div>
-
-              <div className="sm:col-span-2">
+              <div className="sm:col-span-3">
                 <label className={label} htmlFor="bairro">
                   Bairro
                 </label>
@@ -524,7 +512,7 @@ function Checkout() {
                   className={field}
                 />
               </div>
-              <div className="sm:col-span-3">
+              <div className="sm:col-span-6">
                 <label className={label} htmlFor="cidade">
                   Cidade
                 </label>
@@ -532,18 +520,6 @@ function Checkout() {
                   id="cidade"
                   value={addr.city}
                   onChange={(e) => setAddr((a) => ({ ...a, city: e.target.value }))}
-                  className={field}
-                />
-              </div>
-              <div className="sm:col-span-1">
-                <label className={label} htmlFor="uf">
-                  UF
-                </label>
-                <input
-                  id="uf"
-                  maxLength={2}
-                  value={addr.state}
-                  onChange={(e) => setAddr((a) => ({ ...a, state: e.target.value.toUpperCase() }))}
                   className={field}
                 />
               </div>

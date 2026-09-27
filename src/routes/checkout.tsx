@@ -209,18 +209,43 @@ function Checkout() {
     return () => clearInterval(id);
   }, [pix, expired, navigate, checkStatus]);
 
-  function validate() {
+  function validateStep1() {
     if (name.trim().length < 2) return "Informe seu nome completo.";
-    if (!/^\S+@\S+\.\S+$/.test(email.trim())) return "Informe um e-mail válido.";
-    if (cpf.replace(/\D/g, "").length !== 11) return "Informe um CPF válido.";
     const digitsPhone = phone.replace(/\D/g, "");
     if (digitsPhone.length < 10 || digitsPhone.length > 11)
-      return "Informe um telefone válido com DDD.";
+      return "Informe um celular válido com DDD.";
+    return "";
+  }
+
+  function validateStep2() {
     if (addr.cep.replace(/\D/g, "").length !== 8) return "Informe um CEP válido.";
     if (!addr.street.trim()) return "Informe a rua.";
     if (!addr.number.trim()) return "Informe o número.";
     if (!addr.city.trim() || !addr.state.trim()) return "Informe cidade e estado.";
     return "";
+  }
+
+  function validateStep3() {
+    if (!/^\S+@\S+\.\S+$/.test(email.trim())) return "Informe um e-mail válido.";
+    if (cpf.replace(/\D/g, "").length !== 11) return "Informe um CPF válido.";
+    return "";
+  }
+
+  function validate() {
+    return validateStep1() || validateStep2() || validateStep3();
+  }
+
+  function goTo(next: 1 | 2 | 3) {
+    setError("");
+    setStep(next);
+    requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
+  }
+
+  function nextStep() {
+    const v = step === 1 ? validateStep1() : step === 2 ? validateStep2() : "";
+    setError(v);
+    if (v) return;
+    goTo(step === 1 ? 2 : 3);
   }
 
   async function payWithPix() {

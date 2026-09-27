@@ -115,6 +115,7 @@ function Checkout() {
   const [shipping, setShipping] = useState<ShippingId>("gratis");
   const [cepStatus, setCepStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
   const [error, setError] = useState("");
+  const [step, setStep] = useState<1 | 2 | 3>(1);
   const [pixLoading, setPixLoading] = useState(false);
   const [pix, setPix] = useState<{ code: string; transactionId: string } | null>(null);
   const [qrDataUrl, setQrDataUrl] = useState("");

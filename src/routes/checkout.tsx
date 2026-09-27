@@ -752,14 +752,24 @@ function Checkout() {
 
           {error && <p className="mt-4 text-sm font-medium text-destructive">{error}</p>}
 
-          <button
-            onClick={payWithPix}
-            disabled={items.length === 0 || pixLoading}
-            className="mt-4 flex min-h-14 w-full items-center justify-center gap-2 rounded-md bg-cta text-base font-bold uppercase tracking-wide text-cta-foreground shadow-cta transition active:scale-[0.99] disabled:opacity-40"
-          >
-            {pixLoading ? <Loader2 className="size-5 animate-spin" /> : <QrCode className="size-5" />}
-            Pagar com Pix
-          </button>
+          <div className="mt-4 flex gap-2">
+            <button
+              onClick={() => goTo(2)}
+              className="flex min-h-14 items-center justify-center rounded-md border border-border px-4 text-sm font-semibold text-muted-foreground"
+            >
+              Voltar
+            </button>
+            <button
+              onClick={payWithPix}
+              disabled={items.length === 0 || pixLoading}
+              className="flex min-h-14 flex-1 items-center justify-center gap-2 rounded-md bg-cta text-base font-bold uppercase tracking-wide text-cta-foreground shadow-cta transition active:scale-[0.99] disabled:opacity-40"
+            >
+              {pixLoading ? <Loader2 className="size-5 animate-spin" /> : <QrCode className="size-5" />}
+              Gerar Pix
+            </button>
+          </div>
+          </>
+          )}
         </>
       )}
 

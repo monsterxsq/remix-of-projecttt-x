@@ -171,6 +171,12 @@ function ProductPage() {
           <p className="mt-1 text-sm text-success">
             ou 3x de {brl(product.price / 3)} sem juros • Pix com desconto
           </p>
+          {product.stock && (
+            <p className="mt-3 flex items-center gap-1.5 text-sm font-semibold text-destructive">
+              <Flame className="size-4 shrink-0" />
+              Apenas {product.stock} unidades disponíveis — neste preço
+            </p>
+          )}
 
           <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
             {product.description}

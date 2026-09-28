@@ -54,6 +54,7 @@ export type Product = {
   rating: number;
   reviews: number;
   sold: number;
+  stock?: number;
 };
 
 export const PRODUCTS: Product[] = [

@@ -113,7 +113,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     slug: "lip-juice-cafe",
-    name: "NOVO Lip Juice Café",
+    name: "(NOVIDADE) Lip Juice Premium Café Espresso| Mari Maria Makeup",
     tagline: "Edição limitada com charm + chaveiro",
     price: 26.89,
     compareAt: 59.9,

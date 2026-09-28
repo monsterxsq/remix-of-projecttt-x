@@ -4,6 +4,8 @@ import lipTangerina from "@/assets/lip-juice-tangerina.jpg";
 import lipMorango from "@/assets/lip-juice-morango.jpg";
 import lipMelancia from "@/assets/lip-juice-melancia.jpg";
 import lipPitaya from "@/assets/lip-juice-pitaya.png";
+import bubbleGum1 from "@/assets/lip-juice-bubble-gum-1.png.asset.json";
+import bubbleGum2 from "@/assets/lip-juice-bubble-gum-2.png.asset.json";
 import lipCoco from "@/assets/lip-juice-coco.jpg";
 import glowDuoChocolate from "@/assets/glow-duo-chocolate.png";
 import glowDuoCaramelo from "@/assets/glow-duo-caramelo.png";

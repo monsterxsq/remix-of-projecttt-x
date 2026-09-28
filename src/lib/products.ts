@@ -90,6 +90,28 @@ export const PRODUCTS: Product[] = [
     sold: 3120,
   },
   {
+    slug: "lip-juice-bubble-gum",
+    name: "Lip Juice Bubble Gum | Mari Maria Makeup",
+    tagline: "Gloss com cheirinho de tutti frutti + case e charme exclusivos",
+    price: 32.97,
+    compareAt: 79.9,
+    image: bubbleGum1.url,
+    badge: "Só 6 unidades",
+    stock: 6,
+    gallery: [bubbleGum1.url, bubbleGum2.url],
+    description:
+      "O Bubble Gum é um gloss labial com cheirinho de tutti frutti formulado com ativos poderosos, como Vitamina E, D-Pantenol, Ácido Hialurônico, Manteiga de Karité e Óleo de Coco, que garantem hidratação profunda, nutrição intensa e cuidado completo para os lábios. Ainda vem com case e um lindo charme para você pendurar na sua bolsa.",
+    bullets: [
+      "Cheirinho de tutti frutti",
+      "Hidratação profunda com Vitamina E e Ácido Hialurônico",
+      "Vem com case + charme colecionável",
+      "Nutrição intensa com Karité e Óleo de Coco",
+    ],
+    rating: 4.9,
+    reviews: 2874,
+    sold: 980,
+  },
+  {
     slug: "lip-juice-cafe",
     name: "NOVO Lip Juice Café",
     tagline: "Edição limitada com charm + chaveiro",

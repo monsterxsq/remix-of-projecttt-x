@@ -4,8 +4,6 @@ import lipTangerina from "@/assets/lip-juice-tangerina.jpg";
 import lipMorango from "@/assets/lip-juice-morango.jpg";
 import lipMelancia from "@/assets/lip-juice-melancia.jpg";
 import lipPitaya from "@/assets/lip-juice-pitaya.png";
-import bubbleGum1 from "@/assets/lip-juice-bubble-gum-1.png.asset.json";
-import bubbleGum2 from "@/assets/lip-juice-bubble-gum-2.png.asset.json";
 import lipCoco from "@/assets/lip-juice-coco.jpg";
 import glowDuoChocolate from "@/assets/glow-duo-chocolate.png";
 import glowDuoCaramelo from "@/assets/glow-duo-caramelo.png";
@@ -34,6 +32,13 @@ import iceCreamy1 from "@/assets/ice-creamy-01.png";
 import iceCreamy2 from "@/assets/ice-creamy-04.png";
 import iceCreamy3 from "@/assets/ice-creamy-SITE-foto-ajustada-aplicador-ice-creamy.png";
 import iceCreamy4 from "@/assets/ice-creamy-strawberry--2-.png";
+
+const bubbleGumImages = [
+  "https://marimaria.vtexassets.com/arquivos/ids/173215/BUBBLEGUM-2.png?v=639157521174670000",
+  "https://marimaria.vtexassets.com/arquivos/ids/173216/BUBBLEGUM-3.png?v=639157521174830000",
+  "https://marimaria.vtexassets.com/arquivos/ids/173217/DEPOIS-1.png?v=639157521175130000",
+  "https://marimaria.vtexassets.com/arquivos/ids/173218/DEPOIS-2.png?v=639157521175130000",
+];
 
 export type Product = {
   slug: string;
@@ -95,10 +100,10 @@ export const PRODUCTS: Product[] = [
     tagline: "Gloss com cheirinho de tutti frutti + case e charme exclusivos",
     price: 32.97,
     compareAt: 79.9,
-    image: bubbleGum1.url,
+    image: bubbleGumImages[0],
     badge: "Só 6 unidades",
     stock: 6,
-    gallery: [bubbleGum1.url, bubbleGum2.url],
+    gallery: bubbleGumImages,
     description:
       "O Bubble Gum é um gloss labial com cheirinho de tutti frutti formulado com ativos poderosos, como Vitamina E, D-Pantenol, Ácido Hialurônico, Manteiga de Karité e Óleo de Coco, que garantem hidratação profunda, nutrição intensa e cuidado completo para os lábios. Ainda vem com case e um lindo charme para você pendurar na sua bolsa.",
     bullets: [

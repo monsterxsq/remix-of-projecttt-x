@@ -33,8 +33,10 @@ import iceCreamy2 from "@/assets/ice-creamy-04.png";
 import iceCreamy3 from "@/assets/ice-creamy-SITE-foto-ajustada-aplicador-ice-creamy.png";
 import iceCreamy4 from "@/assets/ice-creamy-strawberry--2-.png";
 
+const bubbleGumMainImage =
+  "https://marimaria.vtexassets.com/arquivos/ids/173215/BUBBLEGUM-2.png?v=639157521174670000";
 const bubbleGumImages = [
-  "https://marimaria.vtexassets.com/arquivos/ids/173215/BUBBLEGUM-2.png?v=639157521174670000",
+  bubbleGumMainImage,
   "https://marimaria.vtexassets.com/arquivos/ids/173216/BUBBLEGUM-3.png?v=639157521174830000",
   "https://marimaria.vtexassets.com/arquivos/ids/173217/DEPOIS-1.png?v=639157521175130000",
   "https://marimaria.vtexassets.com/arquivos/ids/173218/DEPOIS-2.png?v=639157521175130000",
@@ -100,7 +102,7 @@ export const PRODUCTS: Product[] = [
     tagline: "Gloss com cheirinho de tutti frutti + case e charme exclusivos",
     price: 32.97,
     compareAt: 79.9,
-    image: bubbleGumImages[0],
+    image: bubbleGumMainImage,
     badge: "Só 6 unidades",
     stock: 6,
     gallery: bubbleGumImages,

@@ -48,7 +48,10 @@ export function CartDrawer() {
                       <p className="mt-0.5 text-xs text-muted-foreground">{i.variant}</p>
                     )}
                     <div className="mt-2 flex items-center justify-between">
-                      <div className="flex items-center gap-2 rounded-md bg-card px-2 py-1.5">
+                      {i.price === 0 ? (
+                        <span className="text-xs font-semibold text-success">1 produto grátis</span>
+                      ) : (
+                        <div className="flex items-center gap-2 rounded-md bg-card px-2 py-1.5">
                         <button onClick={() => setQty(i.id, i.qty - 1)} aria-label="Diminuir">
                           <Minus className="size-3.5" />
                         </button>
@@ -56,8 +59,11 @@ export function CartDrawer() {
                         <button onClick={() => setQty(i.id, i.qty + 1)} aria-label="Aumentar">
                           <Plus className="size-3.5" />
                         </button>
-                      </div>
-                      <p className="text-sm font-bold text-primary">{brl(i.price * i.qty)}</p>
+                        </div>
+                      )}
+                      <p className={`text-sm font-bold ${i.price === 0 ? "text-success" : "text-primary"}`}>
+                        {i.price === 0 ? "Grátis" : brl(i.price * i.qty)}
+                      </p>
                     </div>
                   </div>
                   <button
@@ -76,7 +82,7 @@ export function CartDrawer() {
         <footer className="space-y-3 border-t border-border px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 sm:px-5">
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">Frete</span>
-            <span className="font-semibold text-success">GRÁTIS</span>
+            <span className="font-semibold text-muted-foreground">Calculado no checkout</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="font-display text-lg">Total</span>
@@ -87,7 +93,7 @@ export function CartDrawer() {
               disabled
               className="min-h-14 w-full rounded-md bg-cta py-4 text-sm font-bold uppercase tracking-wide text-cta-foreground opacity-40"
             >
-              Finalizar compra com 90% OFF
+              Finalizar compra
             </button>
           ) : (
             <Link
@@ -95,7 +101,7 @@ export function CartDrawer() {
               onClick={() => setOpen(false)}
               className="flex min-h-14 w-full items-center justify-center rounded-md bg-cta py-4 text-sm font-bold uppercase tracking-wide text-cta-foreground shadow-cta transition active:scale-[0.99]"
             >
-              Finalizar compra com 90% OFF
+              Finalizar compra
             </Link>
           )}
           <p className="text-center text-xs text-muted-foreground">

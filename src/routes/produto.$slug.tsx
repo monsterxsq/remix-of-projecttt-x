@@ -1,13 +1,16 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import {
   ArrowLeft,
+  Check,
   Flame,
+  Minus,
+  Plus,
   ShoppingBag,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { REVIEWS, SocialProof, Stars } from "@/components/SocialProof";
-import { PRODUCTS, brl, getProduct, type Product } from "@/lib/products";
+import { BUMPS, PRODUCTS, brl, getProduct, type Product } from "@/lib/products";
 import { useStore } from "@/lib/store";
 
 export const Route = createFileRoute("/produto/$slug")({
@@ -23,15 +26,13 @@ export const Route = createFileRoute("/produto/$slug")({
       };
     }
     const { product } = loaderData;
-    const title = `${product.name} — Produto Grátis | Mari Maria`;
+    const title = `${product.name} — 90% OFF | Mari Maria 9 Anos`;
     return {
       meta: [
         { title },
         { name: "description", content: product.description.slice(0, 155) },
         { property: "og:title", content: title },
         { property: "og:description", content: product.description.slice(0, 155) },
-        { property: "og:type", content: "website" },
-        { name: "twitter:card", content: "summary_large_image" },
       ],
     };
   },
@@ -42,6 +43,8 @@ function ProductPage() {
   const { product } = Route.useLoaderData() as { product: Product };
   const { add } = useStore();
   const [selected, setSelected] = useState<string[]>([]);
+  const [qty, setQty] = useState(1);
+  const [bumps, setBumps] = useState<string[]>([]);
   const [error, setError] = useState("");
   const [view, setView] = useState<string | null>(null);
   const ctaRef = useRef<HTMLDivElement | null>(null);
@@ -79,13 +82,17 @@ function ProductPage() {
     add({
       slug: product.slug,
       name: product.name,
-      price: 0,
+      price: product.price,
       image: product.image,
-      qty: 1,
+      qty,
       variant: selected.length ? selected.join(" + ") : undefined,
     });
+    BUMPS.filter((b) => bumps.includes(b.slug)).forEach((b) =>
+      add({ slug: b.slug, name: b.name, price: b.price, image: b.image, qty: 1 }),
+    );
   }
 
+  const discount = Math.round((1 - product.price / product.compareAt) * 100);
   const related = PRODUCTS.filter((p) => p.slug !== product.slug).slice(0, 3);
 
   return (
@@ -105,9 +112,7 @@ function ProductPage() {
           <img
             src={
               view ||
-              (selected.length > 0
-                ? product.optionImages?.[selected[selected.length - 1] ?? ""]
-                : undefined) ||
+              (selected.length && product.optionImages?.[selected[selected.length - 1]!]) ||
               product.image
             }
             alt={product.name}
@@ -116,8 +121,8 @@ function ProductPage() {
             decoding="async"
             className="aspect-square w-full object-cover"
           />
-          <span className="absolute left-4 top-4 rounded-full bg-success px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-success-foreground">
-            Produto grátis
+          <span className="absolute left-4 top-4 rounded-full bg-primary px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-primary-foreground">
+            {discount}% OFF
           </span>
         </div>
         {(product.gallery ?? (!product.options && product.optionImages
@@ -158,16 +163,18 @@ function ProductPage() {
           </div>
 
           <div className="mt-5 flex items-end gap-3">
-            <span className="font-display text-3xl text-success sm:text-4xl">Grátis</span>
+            <span className="font-display text-3xl text-primary sm:text-4xl">{brl(product.price)}</span>
             <span className="pb-1 text-sm text-muted-foreground line-through">
               {brl(product.compareAt)}
             </span>
           </div>
-          <p className="mt-1 text-sm text-success">Você paga apenas o frete na primeira compra</p>
+          <p className="mt-1 text-sm text-success">
+            ou 3x de {brl(product.price / 3)} sem juros • Pix com desconto
+          </p>
           {product.stock && (
             <p className="mt-3 flex items-center gap-1.5 text-sm font-semibold text-destructive">
               <Flame className="size-4 shrink-0" />
-              Apenas {product.stock} unidades disponíveis
+              Apenas {product.stock} unidades disponíveis — neste preço
             </p>
           )}
 
@@ -222,14 +229,76 @@ function ProductPage() {
             </div>
           )}
 
+          <div className="mt-7">
+            <p className="text-xs font-bold uppercase tracking-wider">Leve também</p>
+            <ul className="mt-3 space-y-2">
+              {BUMPS.map((b) => {
+                const on = bumps.includes(b.slug);
+                return (
+                  <li key={b.slug}>
+                    <button
+                      onClick={() =>
+                        setBumps((prev) =>
+                          on ? prev.filter((s) => s !== b.slug) : [...prev, b.slug],
+                        )
+                      }
+                      className={`flex w-full items-center gap-3 rounded-md border p-3 text-left transition ${
+                        on ? "border-primary bg-accent/40" : "border-border bg-card"
+                      }`}
+                    >
+                      <span
+                        className={`grid size-5 shrink-0 place-items-center rounded-md border ${
+                          on ? "border-primary bg-primary" : "border-input bg-card"
+                        }`}
+                      >
+                        {on && <Check className="size-3.5 text-primary-foreground" />}
+                      </span>
+                      <img
+                        src={b.image}
+                        alt={b.name}
+                        loading="lazy"
+                        width={48}
+                        height={48}
+                        className="size-12 rounded-sm object-cover"
+                      />
+                      <span className="flex-1 text-sm font-semibold leading-tight">{b.name}</span>
+                      <span className="text-right text-sm">
+                        <b className="text-primary">{brl(b.price)}</b>
+                        <br />
+                        <s className="text-xs text-muted-foreground">{brl(b.compareAt)}</s>
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+
           {error && <p className="mt-4 text-sm font-medium text-destructive">{error}</p>}
 
           <div ref={ctaRef} className="mt-6 flex items-center gap-3">
+            <div className="flex items-center gap-2 rounded-md border border-border bg-card px-3 py-3">
+              <button
+                onClick={() => setQty((q) => Math.max(1, q - 1))}
+                aria-label="Diminuir"
+                className="grid size-8 place-items-center"
+              >
+                <Minus className="size-4" />
+              </button>
+              <span className="w-5 text-center font-semibold">{qty}</span>
+              <button
+                onClick={() => setQty((q) => q + 1)}
+                aria-label="Aumentar"
+                className="grid size-8 place-items-center"
+              >
+                <Plus className="size-4" />
+              </button>
+            </div>
             <button
               onClick={addToCart}
               className="min-h-14 flex-1 rounded-md bg-primary px-4 text-sm font-bold uppercase tracking-wide text-primary-foreground shadow-glow transition hover:brightness-110 sm:text-base"
             >
-              Escolher grátis
+              Adicionar à sacola
             </button>
           </div>
         </div>
@@ -251,7 +320,7 @@ function ProductPage() {
       </section>
 
       <section className="mx-auto max-w-5xl px-4 pb-14 sm:px-5">
-        <h2 className="text-xl sm:text-2xl">Outros produtos grátis</h2>
+        <h2 className="text-xl sm:text-2xl">Aproveite o desconto em</h2>
         <ul className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5">
           {related.map((p) => (
             <li key={p.slug}>
@@ -271,7 +340,7 @@ function ProductPage() {
                 />
                 <div className="p-3 sm:p-4">
                   <p className="text-sm font-semibold leading-tight">{p.name}</p>
-                  <p className="mt-1 font-display text-lg text-success">Grátis</p>
+                  <p className="mt-1 font-display text-lg text-primary">{brl(p.price)}</p>
                 </div>
               </Link>
             </li>
@@ -295,14 +364,32 @@ function ProductPage() {
           />
           <div className="hidden min-w-0 flex-1 sm:block">
             <p className="truncate text-sm font-semibold leading-tight">{product.name}</p>
-            <p className="font-display text-lg leading-none text-success">Grátis</p>
+            <p className="font-display text-lg leading-none text-primary">{brl(product.price)}</p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setQty((q) => Math.max(1, q - 1))}
+              aria-label="Diminuir"
+              className="grid size-10 place-items-center rounded-full bg-primary text-primary-foreground transition hover:brightness-110"
+            >
+              <Minus className="size-5" />
+            </button>
+            <span className="w-5 text-center text-lg font-semibold">{qty}</span>
+            <button
+              onClick={() => setQty((q) => q + 1)}
+              aria-label="Aumentar"
+              className="grid size-10 place-items-center rounded-full bg-primary text-primary-foreground transition hover:brightness-110"
+            >
+              <Plus className="size-5" />
+            </button>
           </div>
 
           <button
             onClick={addToCart}
             className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-primary px-5 text-sm font-bold uppercase tracking-wide text-primary-foreground shadow-glow transition hover:brightness-110 sm:flex-none sm:px-10"
           >
-            <ShoppingBag className="size-4" /> Escolher grátis
+            <ShoppingBag className="size-4" /> Adicionar à sacola
           </button>
         </div>
       </div>

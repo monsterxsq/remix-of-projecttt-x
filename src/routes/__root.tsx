@@ -7,7 +7,6 @@ import {
   useRouterState,
   HeadContent,
   Scripts,
-  type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { AlertTriangle, Menu, ShoppingBag } from "lucide-react";
 import { Suspense, lazy, useEffect, type ReactNode } from "react";
@@ -54,13 +53,12 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: ErrorComponentProps) {
-  const normalizedError = error instanceof Error ? error : new Error(String(error));
-  console.error(normalizedError);
+function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+  console.error(error);
   const router = useRouter();
   useEffect(() => {
-    reportLovableError(normalizedError, { boundary: "tanstack_root_error_component" });
-  }, [normalizedError]);
+    reportLovableError(error, { boundary: "tanstack_root_error_component" });
+  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -99,19 +97,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" }
       ,{ name: "theme-color", content: "#FF4C00" },
-      { title: "Produto Grátis na Primeira Compra | Mari Maria Makeup" },
+      { title: "Mari Maria Makeup — Promoção Limitada" },
       {
         name: "description",
         content:
-          "Escolha 1 produto grátis na sua primeira compra Mari Maria Makeup. Oferta por tempo limitado.",
+          "Responda 4 perguntas rápidas e libere seu desconto especial para garantir um dos 432 produtos da nossa promoção limitada.",
       },
       { property: "og:site_name", content: "Mari Maria Makeup" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:title", content: "Produto Grátis na Primeira Compra | Mari Maria Makeup" },
-      { name: "twitter:title", content: "Produto Grátis na Primeira Compra | Mari Maria Makeup" },
-      { property: "og:description", content: "Escolha 1 produto grátis na sua primeira compra Mari Maria Makeup. Oferta por tempo limitado." },
-      { name: "twitter:description", content: "Escolha 1 produto grátis na sua primeira compra Mari Maria Makeup. Oferta por tempo limitado." },
+      { property: "og:title", content: "Mari Maria Makeup — Promoção Limitada" },
+      { name: "twitter:title", content: "Mari Maria Makeup — Promoção Limitada" },
+      { property: "og:description", content: "Responda 4 perguntas rápidas e libere seu desconto especial para garantir um dos 432 produtos da nossa promoção limitada." },
+      { name: "twitter:description", content: "Responda 4 perguntas rápidas e libere seu desconto especial para garantir um dos 432 produtos da nossa promoção limitada." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6a7c3202-5a34-4466-b42c-7564bce960a5/id-preview-db3a8f14--494c342b-b117-4d82-987f-2b157f0d86c7.lovable.app-1785942331136.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6a7c3202-5a34-4466-b42c-7564bce960a5/id-preview-db3a8f14--494c342b-b117-4d82-987f-2b157f0d86c7.lovable.app-1785942331136.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

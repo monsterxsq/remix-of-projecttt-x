@@ -7,7 +7,6 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { PRODUCTS } from "@/lib/products";
 
 export type CartItem = {
   id: string;
@@ -54,17 +53,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const c = localStorage.getItem(CART_KEY);
-      if (c) {
-        const stored = JSON.parse(c) as CartItem[];
-        const freeSlugs = new Set(PRODUCTS.map((product) => product.slug));
-        setItems(
-          stored.map((item) =>
-            freeSlugs.has(item.slug) && item.variant !== "Oferta extra"
-              ? { ...item, price: 0, qty: 1 }
-              : item,
-          ),
-        );
-      }
+      if (c) setItems(JSON.parse(c));
       const f = localStorage.getItem(FUNNEL_KEY);
       if (f) setFunnelState(JSON.parse(f));
     } catch {
@@ -89,9 +78,6 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const add: StoreValue["add"] = useCallback((item) => {
     const id = `${item.slug}${item.variant ? `::${item.variant}` : ""}`;
     setItems((prev) => {
-      if (item.price === 0) {
-        return [...prev.filter((product) => product.price !== 0), { ...item, id, qty: 1 }];
-      }
       const found = prev.find((p) => p.id === id);
       if (found) {
         return prev.map((p) => (p.id === id ? { ...p, qty: p.qty + (item.qty ?? 1) } : p));
@@ -107,9 +93,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const setQty = useCallback((id: string, qty: number) => {
     setItems((prev) =>
-      qty <= 0
-        ? prev.filter((p) => p.id !== id)
-        : prev.map((p) => (p.id === id ? { ...p, qty: p.price === 0 ? 1 : qty } : p)),
+      qty <= 0 ? prev.filter((p) => p.id !== id) : prev.map((p) => (p.id === id ? { ...p, qty } : p)),
     );
   }, []);
 

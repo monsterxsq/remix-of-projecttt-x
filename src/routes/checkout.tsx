@@ -74,12 +74,6 @@ const SHIPPING = [
     desc: "Chega em até 5 dias úteis",
     price: 11.9,
   },
-  {
-    id: "gratis",
-    label: "Frete grátis",
-    desc: "Chega em até 13 dias úteis",
-    price: 0,
-  },
 ] as const;
 
 type ShippingId = (typeof SHIPPING)[number]["id"];
@@ -112,7 +106,7 @@ function Checkout() {
   const [cpf, setCpf] = useState("");
   const [phone, setPhone] = useState("");
   const [addr, setAddr] = useState<Address>(EMPTY);
-  const [shipping, setShipping] = useState<ShippingId>("gratis");
+  const [shipping, setShipping] = useState<ShippingId>("correios");
   const [cepStatus, setCepStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
   const [error, setError] = useState("");
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -129,7 +123,7 @@ function Checkout() {
   // Integração de pagamento removida — aguardando nova documentação do gateway.
 
 
-  const shippingOption = SHIPPING.find((s) => s.id === shipping) ?? SHIPPING[2];
+  const shippingOption = SHIPPING.find((s) => s.id === shipping) ?? SHIPPING[1];
   const grandTotal = total + shippingOption.price;
 
   const lookupCep = useCallback(async (raw: string) => {

@@ -82,7 +82,7 @@ export function CartDrawer() {
         <footer className="space-y-3 border-t border-border px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 sm:px-5">
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">Frete</span>
-            <span className="font-semibold text-success">GRÁTIS</span>
+            <span className="font-semibold text-muted-foreground">Calculado no checkout</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="font-display text-lg">Total</span>

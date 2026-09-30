@@ -5,4 +5,4 @@
 - [x] Tornar os produtos principais grátis e atualizar textos da promoção
 - [x] Remover ofertas extras da home e das páginas de produto
 - [x] Manter ofertas extras selecionáveis no pagamento
-- [ ] Validar o fluxo no celular
+- [x] Validar o fluxo no celular

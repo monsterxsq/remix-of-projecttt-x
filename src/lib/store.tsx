@@ -38,7 +38,9 @@ type StoreValue = {
   setSearch: (v: string) => void;
 };
 
-const StoreContext = createContext<StoreValue | null>(null);
+// Keep a single context instance across hot reloads so provider and consumers always match.
+const g = globalThis as { __mmStoreContext?: React.Context<StoreValue | null> };
+const StoreContext = g.__mmStoreContext ?? (g.__mmStoreContext = createContext<StoreValue | null>(null));
 
 const CART_KEY = "mm_cart_v1";
 const FUNNEL_KEY = "mm_funnel_v1";

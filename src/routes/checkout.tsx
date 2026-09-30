@@ -307,7 +307,7 @@ function Checkout() {
 
       <h1 className="mt-2 text-2xl leading-tight sm:text-3xl">Finalizar pedido</h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        Desconto de <b className="text-primary">90% OFF</b> aplicado • pagamento via Pix
+        <b className="text-success">1 produto grátis</b> aplicado • pague o frete via Pix
       </p>
 
       {pix ? (
@@ -612,7 +612,7 @@ function Checkout() {
           </section>
 
           <section className="mt-4 rounded-md border border-primary/30 bg-card p-4 shadow-soft sm:p-5">
-            <h2 className="text-base sm:text-lg">Leve também com desconto</h2>
+            <h2 className="text-base sm:text-lg">Ofertas extras</h2>
             <p className="mt-1 text-xs text-muted-foreground">
               Oferta exclusiva desta compra — adicione com 1 toque.
             </p>
@@ -681,7 +681,7 @@ function Checkout() {
                   <div className="min-w-0 flex-1">
                     <p className="line-clamp-2 text-sm font-medium">{i.name}</p>
                     {i.variant && <p className="text-xs text-muted-foreground">{i.variant}</p>}
-                    <div className="mt-1.5 flex items-center gap-2">
+                    {i.price > 0 && <div className="mt-1.5 flex items-center gap-2">
                       <button
                         aria-label="Diminuir quantidade"
                         onClick={() => setQty(i.id, i.qty - 1)}
@@ -704,9 +704,11 @@ function Checkout() {
                       >
                         <Trash2 className="size-3.5" />
                       </button>
-                    </div>
+                    </div>}
                   </div>
-                  <b className="shrink-0">{brl(i.price * i.qty)}</b>
+                  <b className={`shrink-0 ${i.price === 0 ? "text-success" : ""}`}>
+                    {i.price === 0 ? "Grátis" : brl(i.price * i.qty)}
+                  </b>
                 </li>
               ))}
             </ul>

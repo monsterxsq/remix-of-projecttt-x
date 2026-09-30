@@ -101,15 +101,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Responda 4 perguntas rápidas e libere seu desconto especial para garantir um dos 432 produtos da nossa promoção limitada.",
+          "Escolha 1 produto grátis na sua primeira compra Mari Maria Makeup. Oferta por tempo limitado.",
       },
       { property: "og:site_name", content: "Mari Maria Makeup" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:title", content: "Mari Maria Makeup — Promoção Limitada" },
       { name: "twitter:title", content: "Mari Maria Makeup — Promoção Limitada" },
-      { property: "og:description", content: "Responda 4 perguntas rápidas e libere seu desconto especial para garantir um dos 432 produtos da nossa promoção limitada." },
-      { name: "twitter:description", content: "Responda 4 perguntas rápidas e libere seu desconto especial para garantir um dos 432 produtos da nossa promoção limitada." },
+      { property: "og:description", content: "Escolha 1 produto grátis na sua primeira compra Mari Maria Makeup. Oferta por tempo limitado." },
+      { name: "twitter:description", content: "Escolha 1 produto grátis na sua primeira compra Mari Maria Makeup. Oferta por tempo limitado." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6a7c3202-5a34-4466-b42c-7564bce960a5/id-preview-db3a8f14--494c342b-b117-4d82-987f-2b157f0d86c7.lovable.app-1785942331136.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6a7c3202-5a34-4466-b42c-7564bce960a5/id-preview-db3a8f14--494c342b-b117-4d82-987f-2b157f0d86c7.lovable.app-1785942331136.png" },
     ],

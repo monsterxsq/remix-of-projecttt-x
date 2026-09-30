@@ -78,6 +78,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const add: StoreValue["add"] = useCallback((item) => {
     const id = `${item.slug}${item.variant ? `::${item.variant}` : ""}`;
     setItems((prev) => {
+      if (item.price === 0) {
+        return [...prev.filter((product) => product.price !== 0), { ...item, id, qty: 1 }];
+      }
       const found = prev.find((p) => p.id === id);
       if (found) {
         return prev.map((p) => (p.id === id ? { ...p, qty: p.qty + (item.qty ?? 1) } : p));
@@ -93,7 +96,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const setQty = useCallback((id: string, qty: number) => {
     setItems((prev) =>
-      qty <= 0 ? prev.filter((p) => p.id !== id) : prev.map((p) => (p.id === id ? { ...p, qty } : p)),
+      qty <= 0
+        ? prev.filter((p) => p.id !== id)
+        : prev.map((p) => (p.id === id ? { ...p, qty: p.price === 0 ? 1 : qty } : p)),
     );
   }, []);
 

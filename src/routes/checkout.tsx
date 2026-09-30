@@ -61,18 +61,35 @@ const EMPTY: Address = {
   state: "",
 };
 
+const CORREIOS_LOGO =
+  "https://upload.wikimedia.org/wikipedia/commons/8/84/Correios_%282014%29.svg";
+const JT_LOGO =
+  "https://play-lh.googleusercontent.com/T16hNG-0dvAwHCNezFyc4eIF3GPS_75TnxiAbTwJ-uTz8hSHzgE0dyFtJ1z7qsBJVrNmzMgNF_bKOXl0EHqiIw";
+
 const SHIPPING = [
   {
-    id: "express",
-    label: "Express",
-    desc: "Chega em até 2 dias úteis",
-    price: 23.9,
+    id: "sedex",
+    label: "Correios Sedex",
+    desc: "De 5 a 9 dias úteis",
+    tag: "Melhor opção",
+    logo: CORREIOS_LOGO,
+    price: 27.98,
   },
   {
-    id: "correios",
-    label: "Correios normal",
-    desc: "Chega em até 5 dias úteis",
-    price: 11.9,
+    id: "pac",
+    label: "PAC Correios",
+    desc: "De 8 a 14 dias úteis",
+    tag: "",
+    logo: CORREIOS_LOGO,
+    price: 19.98,
+  },
+  {
+    id: "jt",
+    label: "J&T Express",
+    desc: "De 2 a 4 dias úteis",
+    tag: "",
+    logo: JT_LOGO,
+    price: 39.98,
   },
 ] as const;
 
@@ -540,8 +557,18 @@ function Checkout() {
                     onChange={() => setShipping(opt.id)}
                     className="size-4 accent-[hsl(var(--primary))]"
                   />
+                  <span className="flex h-9 w-14 shrink-0 items-center justify-center rounded-sm bg-card p-1">
+                    <img src={opt.logo} alt={opt.label} className="max-h-full max-w-full object-contain" loading="lazy" />
+                  </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block text-sm font-semibold">{opt.label}</span>
+                    <span className="flex flex-wrap items-center gap-1.5 text-sm font-semibold">
+                      {opt.label}
+                      {opt.tag && (
+                        <span className="rounded-sm bg-success/15 px-1.5 py-0.5 text-[10px] font-bold uppercase text-success">
+                          {opt.tag}
+                        </span>
+                      )}
+                    </span>
                     <span className="block text-xs text-muted-foreground">{opt.desc}</span>
                   </span>
                   <b className="shrink-0 text-sm">{brl(opt.price)}</b>

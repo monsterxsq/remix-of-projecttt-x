@@ -140,7 +140,7 @@ function Checkout() {
   // Integração de pagamento removida — aguardando nova documentação do gateway.
 
 
-  const shippingOption = SHIPPING.find((s) => s.id === shipping) ?? SHIPPING[1];
+  const shippingOption = SHIPPING.find((s) => s.id === shipping) ?? SHIPPING[0];
   const grandTotal = total + shippingOption.price;
 
   const lookupCep = useCallback(async (raw: string) => {

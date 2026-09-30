@@ -544,9 +544,7 @@ function Checkout() {
                     <span className="block text-sm font-semibold">{opt.label}</span>
                     <span className="block text-xs text-muted-foreground">{opt.desc}</span>
                   </span>
-                  <b className={`shrink-0 text-sm ${opt.price === 0 ? "text-success" : ""}`}>
-                    {opt.price === 0 ? "Grátis" : brl(opt.price)}
-                  </b>
+                  <b className="shrink-0 text-sm">{brl(opt.price)}</b>
                 </label>
               ))}
             </div>
@@ -720,9 +718,7 @@ function Checkout() {
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Frete ({shippingOption.label})</span>
-                <span className={shippingOption.price === 0 ? "text-success" : ""}>
-                  {shippingOption.price === 0 ? "Grátis" : brl(shippingOption.price)}
-                </span>
+                <span>{brl(shippingOption.price)}</span>
               </div>
             </div>
             <div className="mt-3 flex items-center justify-between border-t border-border pt-3">

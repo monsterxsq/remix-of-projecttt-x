@@ -97,7 +97,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" }
       ,{ name: "theme-color", content: "#FF4C00" },
-      { title: "Mari Maria Makeup — Promoção Limitada" },
+      { title: "Produto Grátis na Primeira Compra | Mari Maria Makeup" },
       {
         name: "description",
         content:
@@ -106,12 +106,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:site_name", content: "Mari Maria Makeup" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:title", content: "Mari Maria Makeup — Promoção Limitada" },
-      { name: "twitter:title", content: "Mari Maria Makeup — Promoção Limitada" },
+      { property: "og:title", content: "Produto Grátis na Primeira Compra | Mari Maria Makeup" },
+      { name: "twitter:title", content: "Produto Grátis na Primeira Compra | Mari Maria Makeup" },
       { property: "og:description", content: "Escolha 1 produto grátis na sua primeira compra Mari Maria Makeup. Oferta por tempo limitado." },
       { name: "twitter:description", content: "Escolha 1 produto grátis na sua primeira compra Mari Maria Makeup. Oferta por tempo limitado." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6a7c3202-5a34-4466-b42c-7564bce960a5/id-preview-db3a8f14--494c342b-b117-4d82-987f-2b157f0d86c7.lovable.app-1785942331136.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6a7c3202-5a34-4466-b42c-7564bce960a5/id-preview-db3a8f14--494c342b-b117-4d82-987f-2b157f0d86c7.lovable.app-1785942331136.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

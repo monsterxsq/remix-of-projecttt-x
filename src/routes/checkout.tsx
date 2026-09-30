@@ -106,8 +106,8 @@ function maskPhone(v: string) {
 }
 
 function Checkout() {
-  const { items, total, funnel, setQty, remove, add, setOpen } = useStore();
-  const [name, setName] = useState(funnel.name);
+  const { items, total, setQty, remove, add, setOpen } = useStore();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [cpf, setCpf] = useState("");
   const [phone, setPhone] = useState("");
@@ -618,18 +618,25 @@ function Checkout() {
             </p>
             <ul className="mt-3 space-y-2">
               {BUMPS.map((b) => {
-                const inCart = items.some((i) => i.slug === b.slug);
+                const bumpId = `${b.slug}::Oferta extra`;
+                const inCart = items.some((i) => i.id === bumpId);
                 return (
                   <li key={b.slug}>
                     <button
                       type="button"
                       onClick={() => {
                         if (inCart) {
-                          const found = items.find((i) => i.slug === b.slug);
+                          const found = items.find((i) => i.id === bumpId);
                           if (found) remove(found.id);
                           return;
                         }
-                        add({ slug: b.slug, name: b.name, price: b.price, image: b.image });
+                        add({
+                          slug: b.slug,
+                          name: b.name,
+                          price: b.price,
+                          image: b.image,
+                          variant: "Oferta extra",
+                        });
                         setOpen(false);
                       }}
                       className={`flex w-full items-center gap-3 rounded-md border p-3 text-left transition ${

@@ -30,6 +30,8 @@ export const Route = createFileRoute("/produto/$slug")({
         { name: "description", content: product.description.slice(0, 155) },
         { property: "og:title", content: title },
         { property: "og:description", content: product.description.slice(0, 155) },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
       ],
     };
   },
@@ -103,7 +105,9 @@ function ProductPage() {
           <img
             src={
               view ||
-              (selected.length && product.optionImages?.[selected[selected.length - 1]!]) ||
+              (selected.length > 0
+                ? product.optionImages?.[selected[selected.length - 1] ?? ""]
+                : undefined) ||
               product.image
             }
             alt={product.name}

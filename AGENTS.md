@@ -8,3 +8,4 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+- The first-purchase promotion allows exactly one free main product in the cart; paid order bumps are only offered during checkout, so the offer stays clear and enforceable in the client flow.

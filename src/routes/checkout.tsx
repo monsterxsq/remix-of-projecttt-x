@@ -123,7 +123,7 @@ function Checkout() {
   const [cpf, setCpf] = useState("");
   const [phone, setPhone] = useState("");
   const [addr, setAddr] = useState<Address>(EMPTY);
-  const [shipping, setShipping] = useState<ShippingId>("correios");
+  const [shipping, setShipping] = useState<ShippingId>("sedex");
   const [cepStatus, setCepStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
   const [error, setError] = useState("");
   const [step, setStep] = useState<1 | 2 | 3>(1);
